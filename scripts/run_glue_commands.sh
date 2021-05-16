@@ -1,14 +1,32 @@
+#!/bin/bash
 
-## Run Glue Task on qqp dataset
-export TASK_NAME=qqp
-export WANDB_PROJECT=qqp_glue_3_epochs
-python run_glue.py   --model_name_or_path bert-base-uncased   --task_name $TASK_NAME   --do_train   --do_eval   --do_predict --max_seq_length 128   --per_device_train_batch_size 8 --gradient_accumulation_steps 4   --learning_rate 2e-5   --num_train_epochs 3   --output_dir qqp_dataset/qqp_3_epochs/ --overwrite_output_dir --save_steps 40000 --evaluation_strategy steps --eval_steps 5000 --fp16
+export DATA_DIR=directory_name
+export TRAIN_FILE_NAME=train.csv
+export TEST_FILE_NAME=test.csv
+export OUTPUT_DIR=${DATA_DIR}/output
 
+export MAX_LENGTH=64
+export BATCH_SIZE=32
+export NUM_EPOCHS=3
+export LEARING_RATE=2e-5
+export SAVE_STEPS=50000
+export EVAL_STEPS=5000
+export SEED=1
 
-
-## Run Glue Task on Orcas dataset
-
-export WANDB_PROJECT=orcas_glue
-python run_glue.py   --train_file orcas_dataset/train.csv   --validation_file orcas_dataset/validation.csv --test_file orcas_dataset/test.csv  --model_name_or_path bert-base-uncased   --do_train   --do_eval --do_predict  --max_seq_length 128   --per_device_train_batch_size 16   --gradient_accumulation_steps 2  --learning_rate 2e-5   --num_train_epochs 3   --output_dir orcas_dataset/train_output --overwrite_output_dir --save_steps=50000 --evaluation_strategy steps --eval_steps 40000 --fp16
-
-
+python src\run_glue.py \
+    --train_file ${DATA_DIR}/${TRAIN_FILE_NAME} \
+    --validation_file ${DATA_DIR}/${TEST_FILE_NAME} \
+    --model_name_or_path bert-base-uncased \
+    --do_train \
+    --do_eval \
+    --max_seq_length ${MAX_LENGTH} \
+    --per_device_train_batch_size ${BATCH_SIZE} \
+    --learning_rate ${LEARING_RATE} \
+    --num_train_epochs ${NUM_EPOCHS} \
+    --seed ${SEED} \
+    --output_dir ${OUTPUT_DIR} \
+    --overwrite_output_dir \
+    --save_steps ${SAVE_STEPS} \
+    --evaluation_strategy steps \
+    --eval_steps ${EVAL_STEPS} \
+    --fp16
