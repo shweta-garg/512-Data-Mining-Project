@@ -58,3 +58,21 @@ Download QQP and then do 80:10:10 since the full dataset is there
   cat > document_graph_eval.tsv
 } < document_graph.tsv
 ```
+
+## Quora Question Pair Duplication Task
+### Install Transformers
+Install the HuggingFace interface for transformers. 
+https://github.com/huggingface/transformers
+
+### Prepare Data
+Create a folder that contains 2 files - train.csv and test.csv. 
+The format of the files is similar to that of the Quora Question Pairs Dataset. They should have 4 columns - idx, label, sentence1 and sentence2. Where sentence1 and sentence2 contains the two sentences to be compared, idx is an integer index of the sentence pair and column label is a binary column with a value of 0 indicating that the 2 sentences are not similar and 1 indicating that they are similar.
+
+### Run GLUE
+Finally after the data preparation, the BERT model can be trained and tested using the GLUE task of HuggingFace. The command for this is:
+
+```bash
+.\scripts\run_glue_commands.sh
+```
+
+The parameters are given in the file and are self-explantory.
